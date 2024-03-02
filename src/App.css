@@ -1,6 +1,11 @@
 .App {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  filter: blur(0px);
 }
+
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +40,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+body {
+  background-image: url('./web_assets/beach_background.gif');
+  background-size: cover;
+  background-position: center;
 }
