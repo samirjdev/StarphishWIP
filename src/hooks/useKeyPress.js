@@ -1,29 +1,19 @@
-import { useState, useEffect } from 'react';
+useEffect(() => {
+  const handleKeyDown = (e) => {
+    if (emails.length === 0) return; // Don't do anything if there are no emails left
 
-export const useKeyPress = (targetKey) => {
-  const [keyPressed, setKeyPressed] = useState(false);
+    if (e.key === 'ArrowLeft') {
+      // Trigger swipe left
+      swiped('left', emails[currentIndex].ID, emails[currentIndex].IsPhishing);
+    } else if (e.key === 'ArrowRight') {
+      // Trigger swipe right
+      swiped('right', emails[currentIndex].ID, emails[currentIndex].IsPhishing);
+    }
+  };
 
-  useEffect(() => {
-    const downHandler = ({ key }) => {
-      if (key === targetKey) {
-        setKeyPressed(true);
-      }
-    };
+  // Add event listener
+  window.addEventListener('keydown', handleKeyDown);
 
-    const upHandler = ({ key }) => {
-      if (key === targetKey) {
-        setKeyPressed(false);
-      }
-    };
-
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
-
-    return () => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
-    };
-  }, [targetKey]);
-
-  return keyPressed;
-};
+  // Remove event listener on cleanup
+  return () => window.removeEventListener('keydown', handleKeyDown);
+}, [emails, currentIndex]); // Depend on emails and currentIndex

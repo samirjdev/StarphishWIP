@@ -1,0 +1,32 @@
+/* Game.css */
+.game {
+  position: relative;
+  height: 100vh;
+}
+
+/* Game.css */
+.cardContainer {
+  position: absolute;
+  top: 50%; /* Align the top edge of the element to the middle of the parent */
+  left: 50%; /* Align the left edge of the element to the middle of the parent */
+  transform: translate(-50%, -50%); /* Shift the element back to center it perfectly */
+  width: 300px; /* Width of the card */
+  height: 400px; /* Height of the card */
+}
+
+.swipe {
+  position: absolute;
+  width: 100%; /* Ensure this is 100% to take the full width of the cardContainer */
+  height: 100%; /* Ensure this is 100% to take the full height of the cardContainer */
+  border: 5px solid rgb(255, 255, 255); /* Temporarily added for visibility */
+}
+
+/* Game.css */
+.score {
+  position: absolute;
+  top: 10px;
+  left: 595px; /* Adjust as necessary to align to the right */
+  z-index: 1000; /* Ensure score is always visible */
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.95);
+  color: antiquewhite;
+}

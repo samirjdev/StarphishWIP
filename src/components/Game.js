@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import EmailCard from './Card';
+import TinderCard from 'react-tinder-card';
+import EmailCard from './Card'; // Ensure this is correctly pointing to your EmailCard component file
 import Typography from '@mui/material/Typography';
-import { useKeyPress } from '../hooks/useKeyPress';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+import './Game.css'; // Make sure this points to your CSS file
 
 const Game = () => {
   const [emails, setEmails] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const leftPress = useKeyPress('ArrowLeft');
-  const rightPress = useKeyPress('ArrowRight');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [lastDirection, setLastDirection] = useState();
 
   // Fetch emails from backend
   useEffect(() => {
@@ -26,39 +29,78 @@ const Game = () => {
   };
 
   useEffect(() => {
-    if (leftPress) {
-      handleSwipe(false); // Assuming left swipe means "Phishing"
-    } else if (rightPress) {
-      handleSwipe(true); // Assuming right swipe means "Real"
-    }
-  }, [leftPress, rightPress, emails]);
+    const handleKeyDown = (e) => {
+      if (emails.length === 0 || currentIndex >= emails.length) return;
+      
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        const isPhishing = emails[currentIndex].IsPhishing;
+        const emailId = emails[currentIndex].ID;
+        const direction = e.key === 'ArrowLeft' ? 'left' : 'right';
+        
+        // Perform the swipe action
+        swiped(direction, emailId, isPhishing);
+      }
+    };
 
-  const handleSwipe = (isReal) => {
-    if (emails.length === 0) return; // Guard clause if emails are not yet loaded
-    
-    if ((isReal && !emails[currentIndex].IsPhishing) || (!isReal && emails[currentIndex].IsPhishing)) {
-      setScore(score + 1);
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [emails, currentIndex]); // Ensure currentIndex is included in the dependency array
+
+  const swiped = (direction, emailId, isPhishing) => {
+    console.log('Swiping ' + direction);
+    // Assuming left swipe means "Phishing" and right means "Real"
+    const swipeCorrect = (direction === 'left' && isPhishing) || (direction === 'right' && !isPhishing);
+    if (swipeCorrect) {
+      setScore((prevScore) => prevScore + 1);
+      setLastDirection(direction);
+
     }
-    setCurrentIndex((currentIndex + 1) % emails.length);
+
+    // Remove the swiped email from the state
+    setEmails((prevEmails) => prevEmails.filter(email => email.ID !== emailId));
   };
 
-  if (emails.length === 0) return <div>Loading...</div>; // Or any other loading state
+  const onCardLeftScreen = (emailId) => {
+    console.log(emailId + ' left the screen!');
+  };
+
+  const fixedCardStyle = {
+    width: '400px', // Set your desired width
+    height: '500px', // Set your desired height
+    // Add any additional styles as needed
+  };
+  
 
   return (
-    <div style={{ position: 'relative', height: '100vh', width: '100vw' }}> {/* Ensure full viewport width */}
-      <Typography variant="h5" style={{ position: 'absolute', top: 10, right: 16, zIndex: 1000 }}>
+    <div className="game">
+      <Typography variant="h5" className="score" style={{userSelect: 'none'}}>
         {score}
       </Typography>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-        <EmailCard
-          title={emails[currentIndex].Title} // Ensure you're passing the title
-          email={emails[currentIndex].Content}
-          isPhishing={emails[currentIndex].IsPhishing}
+      <div className="cardContainer">
+      {
+       emails.map((email, index) => (
+          <div key={email.ID} style={{ position: 'absolute', zIndex: emails.length - index }}>
+           <TinderCard
+              onSwipe={(dir) => swiped(dir, email.ID, email.IsPhishing)}
+              onCardLeftScreen={() => onCardLeftScreen(email.ID)}
+              preventSwipe={['up', 'down']}
+              style={{ ...fixedCardStyle }} // Apply the fixed dimensions here
+           >
+              <EmailCard
+              title={email.Title}
+               email={email.Content}
+               isPhishing={email.IsPhishing}
+               style={fixedCardStyle} // Apply the fixed dimensions to your EmailCard as well
         />
+      </TinderCard>
+    </div>
+  ))
+}
       </div>
     </div>
   );
 };
-
 
 export default Game;

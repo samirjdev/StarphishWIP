@@ -25,9 +25,9 @@ To get started with Starphish:
 ### Current Features
 
 - **Tinder-style Swiping**: Swipe left or right to identify phishing emails versus legitimate ones.
-- **MongoDB**: Backend powered by MongoDB for efficient data storage and retrieval.
+- **Microsoft Azure + MongoDB**: Data powered by MongoDB Database hosted by regional Microsoft Azure location for efficient data storage and retrieval.
 - **Go Backend**: Utilizes Go for the backend, ensuring robustness and scalability.
-- **React Frontend**: Frontend built with React, along with Material UI for a sleek and responsive design.
+- **React + JS Frontend**: Frontend built with React, along with Material UI for a sleek and responsive design.
 
 ### Future Features
 
