@@ -1,6 +1,6 @@
-# Starphish
+![Logo](/public/starphish.png)
 
-Welcome to Starphish, the Tinder-style cybersecurity awareness training app! Starphish brings a unique and engaging approach to cybersecurity education by gamifying the experience with a familiar swiping interface, reminiscent of popular dating apps like Tinder.
+Welcome to Starphish, the (Work-in-Progress) Tinder-style cybersecurity awareness training app! Starphish brings a unique and engaging approach to cybersecurity education by gamifying the experience with a familiar swiping interface.
 
 ## Why Starphish?
 
